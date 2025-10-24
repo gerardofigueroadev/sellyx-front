@@ -245,7 +245,8 @@
 <script setup lang="ts">
 import axios from 'axios';
 import { computed, onMounted, ref, watch } from 'vue';
-import { Chart as VueChart, Grid, Line, Area, Marker, Tooltip, Responsive } from 'vue3-charts';
+import { Chart as VueChart, Grid, Line, Area, Tooltip, Responsive } from 'vue3-charts';
+import type { ChartAxis, Domain } from 'vue3-charts/dist/types';
 import { API_BASE_URL } from '../constants/env';
 
 type RangeValue = 'day' | 'week' | 'all';
@@ -343,6 +344,8 @@ const resolveChartSize = (width?: number) => ({
 
 const countLineStyle = { stroke: '#0d6efd', strokeWidth: 2 };
 const revenueLineStyle = { stroke: '#6610f2', strokeWidth: 2 };
+const toBandDomain = (values: string[]): Domain =>
+  (values.length ? values : ['', '']) as unknown as Domain;
 
 const countChartData = computed(() =>
   dailySales.value.map((item) => ({
@@ -358,17 +361,17 @@ const revenueChartData = computed(() =>
   })),
 );
 
-const countAxis = computed(() => {
+const countAxis = computed<ChartAxis>(() => {
   const domain = countChartData.value.map((item) => item.day);
   return {
     primary: {
       type: 'band',
-      domain: domain.length ? domain : [''],
+      domain: toBandDomain(domain),
       rotate: domain.length > 6,
     },
     secondary: {
       type: 'linear',
-      domain: ['dataMin', 'dataMax'],
+      domain: ['dataMin', 'dataMax'] as Domain,
       format: (value: string) => `${Math.round(Number(value))}`,
       ticks: 8,
     },
@@ -379,17 +382,17 @@ const countTooltipConfig = computed(() => ({
   count: { label: 'Ventas', color: '#0d6efd' },
 }));
 
-const revenueAxis = computed(() => {
+const revenueAxis = computed<ChartAxis>(() => {
   const domain = revenueChartData.value.map((item) => item.day);
   return {
     primary: {
       type: 'band',
-      domain: domain.length ? domain : [''],
+      domain: toBandDomain(domain),
       rotate: domain.length > 6,
     },
     secondary: {
       type: 'linear',
-      domain: ['dataMin', 'dataMax'],
+      domain: ['dataMin', 'dataMax'] as Domain,
       format: (value: string) => formatCurrency(Number(value)),
       ticks: 8,
     },
