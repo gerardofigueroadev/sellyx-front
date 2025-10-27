@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+import { computed } from 'vue'
+import { RouterLink, RouterView, useRoute } from 'vue-router'
+
+const route = useRoute()
+const showNavbar = computed(() => !route.meta?.hideNavbar)
 </script>
 
 <template>
   <div class="app-shell bg-light min-vh-100 d-flex flex-column">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+    <nav v-if="showNavbar" class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
       <div class="container">
         <RouterLink class="navbar-brand fw-bold" to="/">Panelcito</RouterLink>
         <button

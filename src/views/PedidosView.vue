@@ -23,7 +23,7 @@
                   <th scope="col">Cliente</th>
                   <th scope="col">Fecha</th>
                   <th scope="col">Total</th>
-                  <th scope="col">Estado</th>
+                  <th scope="col">Estado del Pago</th>
                   <th scope="col">Tipo de recojo</th>
                   <th scope="col" class="text-end">Acciones</th>
                 </tr>
@@ -240,6 +240,7 @@ import { API_BASE_URL } from '../constants/env';
 
 interface OrderProduct {
   id: string;
+  name: string;
   price: number;
   count: number;
 }
@@ -262,6 +263,7 @@ interface Order {
   user: string;
   datetime: string;
   createdAt: string;
+  source?: string;
 }
 
 interface OrderPayload {
@@ -273,6 +275,7 @@ interface OrderPayload {
   datetime: string;
   orderCode: string;
   user: string;
+  source: string;
 }
 
 const ORDERS_ENDPOINT = `${API_BASE_URL}/orders`;
@@ -353,6 +356,7 @@ const selectedProducts = computed<OrderProduct[]>(() =>
     if (count > 0) {
       accumulator.push({
         id: product.id,
+        name: product.name,
         price: product.price,
         count,
       });
@@ -371,9 +375,10 @@ const orderPreview = computed<OrderPayload>(() => ({
   subtotal: Number(subtotal.value.toFixed(2)),
   paid: paymentMethod.value === 'QR',
   pickupType: pickupType.value,
-  datetime: staticOrderData.datetime,
+  datetime: Date.now().toString(),
   orderCode: staticOrderData.orderCode,
   user: staticOrderData.user,
+  source: 'web',
 }));
 
 const orderPreviewJson = computed(() => JSON.stringify(orderPreview.value, null, 2));
@@ -448,8 +453,9 @@ const submitCreateOrder = async () => {
         pickupType: payload.pickupType,
         orderCode: payload.orderCode,
         user: payload.user,
-        datetime: payload.datetime,
-        createdAt: payload.datetime,
+        datetime: Date.now(),
+        createdAt: Date.now(),
+        source: payload.source,
       };
 
     orders.value = [createdOrder, ...orders.value];

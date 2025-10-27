@@ -21,6 +21,20 @@ const router = createRouter({
       name: 'pedidos',
       component: () => import('../views/PedidosView.vue'),
     },
+    {
+      path: '/online-pedido/:phone',
+      name: 'online-pedido',
+      component: () => import('../views/OnlinePedidoView.vue'),
+      props: true,
+      meta: { hideNavbar: true },
+    },
+    {
+      path: '/online-pedido/:phone/gracias',
+      name: 'online-pedido-gracias',
+      component: () => import('../views/OnlinePedidoGraciasView.vue'),
+      props: true,
+      meta: { hideNavbar: true },
+    },
   ],
 })
 
