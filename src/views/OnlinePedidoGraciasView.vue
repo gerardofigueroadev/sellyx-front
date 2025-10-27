@@ -14,11 +14,6 @@
               <strong v-if="phoneLabel">{{ phoneLabel }}</strong>
               <span v-else>en los próximos minutos</span>.
             </p>
-            <div class="d-flex flex-column flex-md-row gap-3 justify-content-center">
-              <RouterLink class="btn btn-outline-secondary px-4 py-2" :to="`/online-pedido/${route.params.phone ?? ''}`">
-                Crear otro pedido
-              </RouterLink>
-            </div>
             <p class="text-muted small mt-4 mb-0">
               Si necesitas ajustar algo responde el mensaje y te ayudaremos enseguida.
             </p>

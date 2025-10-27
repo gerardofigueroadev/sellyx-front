@@ -325,9 +325,11 @@ const submitOrder = async () => {
   try {
     await axios.post(ORDER_CREATE_ENDPOINT, payload);
     initializeQuantities(products.value);
+    openWhatsAppIntent(payload);
     router.push({
       name: 'online-pedido-gracias',
       params: { phone: payload.phoneNumber },
+      query: { pickup: payload.pickupType },
     });
   } catch (error) {
     console.error('Error al crear el pedido:', error);
@@ -347,6 +349,19 @@ const formatCurrency = (amount: number | undefined) => {
     currency: 'BOB',
     minimumFractionDigits: 2,
   }).format(amount);
+};
+
+const openWhatsAppIntent = () => {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  const intentUrl = `https://wa.me/`;
+  const openedWindow = window.open(intentUrl, '_blank');
+
+  if (!openedWindow) {
+    window.location.href = intentUrl;
+  }
 };
 
 watch(
