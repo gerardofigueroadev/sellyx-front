@@ -325,7 +325,7 @@ const submitOrder = async () => {
   try {
     await axios.post(ORDER_CREATE_ENDPOINT, payload);
     initializeQuantities(products.value);
-    openWhatsAppIntent(payload);
+    openWhatsAppIntent();
     router.push({
       name: 'online-pedido-gracias',
       params: { phone: payload.phoneNumber },
